@@ -17,18 +17,50 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
 
     return MaterialApp(
+
       debugShowCheckedModeBanner: false,
-      initialRoute: '/login',
+
+      initialRoute: '/',
+
       routes: {
+
+        '/': (context) {
+
+          final user =
+              Supabase.instance.client.auth.currentUser;
+
+          // USUÁRIO LOGADO
+          if (user != null) {
+            return const HomeScreen();
+          }
+
+          // USUÁRIO NÃO LOGADO
+          return const LoginScreen();
+        },
+
         '/login': (context) => const LoginScreen(),
+
         '/register': (context) => const RegisterScreen(),
-        '/home': (context) => const HomeScreen(),
+
+        '/home': (context) {
+
+          final user =
+              Supabase.instance.client.auth.currentUser;
+
+          // PROTEÇÃO DA HOME
+          if (user == null) {
+            return const LoginScreen();
+          }
+
+          return const HomeScreen();
+        },
       },
     );
   }
