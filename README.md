@@ -77,29 +77,6 @@ flutter pub get
 
 ---
 
-## 5. Configurar o Supabase
-
-O aplicativo utiliza Supabase para autenticação e banco de dados.
-
-No arquivo:
-
-```txt
-lib/main.dart
-```
-
-substitua os campos abaixo pelas credenciais do seu projeto Supabase:
-
-```dart
-url: 'SUA_URL',
-anonKey: 'SUA_ANON_KEY',
-```
-
-As credenciais podem ser encontradas em:
-
-Supabase → Settings → API
-
----
-
 ## 6. Executar o aplicativo
 
 Conecte um celular Android com depuração USB ativada ou inicie um emulador Android.
