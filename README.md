@@ -34,9 +34,141 @@ O sistema permite que usuários criem uma conta, façam login e gerenciem uma li
 
 ---
 
-# ▶Como Executar o Projeto
+# Instruções para Executar o Projeto
 
-## 1. Clonar o repositório
+## 1. Pré-requisitos
+
+Antes de iniciar, é necessário ter instalado na máquina:
+
+- Flutter SDK
+- Dart SDK
+- VS Code ou Android Studio
+- Git
+- Android SDK
+- Um dispositivo Android físico ou emulador configurado
+
+---
+
+## 2. Clonar o repositório
+
+Abra o terminal e execute:
 
 ```bash
 git clone https://github.com/Igor-Baptistella/Lista_de_Compras.git
+```
+
+---
+
+## 3. Acessar a pasta do projeto
+
+```bash
+cd Lista_de_Compras
+```
+
+---
+
+## 4. Instalar as dependências
+
+Execute o comando abaixo para baixar todas as bibliotecas utilizadas no projeto:
+
+```bash
+flutter pub get
+```
+
+---
+
+## 5. Configurar o Supabase
+
+O aplicativo utiliza Supabase para autenticação e banco de dados.
+
+No arquivo:
+
+```txt
+lib/main.dart
+```
+
+substitua os campos abaixo pelas credenciais do seu projeto Supabase:
+
+```dart
+url: 'SUA_URL',
+anonKey: 'SUA_ANON_KEY',
+```
+
+As credenciais podem ser encontradas em:
+
+Supabase → Settings → API
+
+---
+
+## 6. Executar o aplicativo
+
+Conecte um celular Android com depuração USB ativada ou inicie um emulador Android.
+
+Depois execute:
+
+```bash
+flutter run
+```
+
+O aplicativo será compilado e iniciado automaticamente.
+
+---
+
+# Descrição da Autenticação e da Base de Dados
+
+## Autenticação
+
+A autenticação do aplicativo foi desenvolvida utilizando o Supabase Authentication com login por e-mail e senha.
+
+Funcionalidades implementadas:
+
+- Cadastro de novos usuários
+- Login de usuários existentes
+- Logout
+- Proteção de telas autenticadas
+- Validação básica de campos
+- Tratamento simples de erros de autenticação
+
+Quando o usuário realiza login com sucesso, o Supabase cria uma sessão autenticada, permitindo acesso às funcionalidades internas do aplicativo.
+
+---
+
+## Base de Dados
+
+O banco de dados utilizado é PostgreSQL hospedado no Supabase.
+
+A aplicação utiliza a tabela:
+
+## shopping_items
+
+Responsável por armazenar os itens da lista de compras.
+
+Campos utilizados:
+
+| Campo | Descrição |
+|---|---|
+| id | Identificador único do item |
+| user_id | ID do usuário dono do item |
+| name | Nome do item |
+| quantity | Quantidade do item |
+| checked | Indica se o item foi comprado |
+| created_at | Data de criação do item |
+
+---
+
+## Operações realizadas no banco
+
+O sistema implementa CRUD completo:
+
+- CREATE → adicionar itens
+- READ → listar itens
+- UPDATE → editar itens e marcar como comprado
+- DELETE → remover itens
+
+Todos os dados são armazenados online utilizando o Supabase Database.
+
+---
+
+# Autor
+
+Projeto desenvolvido por Igor Baptistella para fins acadêmicos.
