@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # lista_de_compras
 
 A new Flutter project.
@@ -15,3 +16,6 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# Lista_de_Compras
+>>>>>>> 5bd5d616f086d973ec8cc4d8d2f11b9361e63985
