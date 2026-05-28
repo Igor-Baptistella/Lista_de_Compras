@@ -4,7 +4,10 @@ class DatabaseService {
 
   final supabase = Supabase.instance.client;
 
-  Future addItem(String name) async {
+  Future addItem(
+    String name,
+    int quantity,
+  ) async {
 
     final user = supabase.auth.currentUser;
 
@@ -12,6 +15,7 @@ class DatabaseService {
 
       'user_id': user!.id,
       'name': name,
+      'quantity': quantity,
     });
   }
 
@@ -46,13 +50,15 @@ class DatabaseService {
         .eq('id', id);
   }
 
-  Future editItem(String id, String newName,) async {
+  Future editItem(String id, String newName, int quantity, ) async {
 
-  await supabase
-      .from('shopping_items')
-      .update({
-        'name': newName,
-      })
-      .eq('id', id);
-}
+    await supabase
+        .from('shopping_items')
+        .update({
+
+          'name': newName,
+          'quantity': quantity,
+        })
+        .eq('id', id);
+  }
 }

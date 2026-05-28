@@ -17,6 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final itemController = TextEditingController();
 
+  final quantityController = TextEditingController();
+
   Future<List<dynamic>> getItems() async {
 
     return await databaseService.getItems();
@@ -28,11 +30,17 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
 
-    await databaseService.addItem(
-      itemController.text,
+    await databaseService.addItem(itemController.text,
+
+      int.tryParse(
+            quantityController.text,
+          ) ??
+          1,
     );
 
     itemController.clear();
+
+    quantityController.clear();
 
     setState(() {});
   }
@@ -60,64 +68,112 @@ class _HomeScreenState extends State<HomeScreen> {
   Future editItemDialog(
     String id,
     String currentName,
+    int currentQuantity,
   ) async {
 
-  final editController = TextEditingController();
+    final editController =
+        TextEditingController();
 
-  editController.text = currentName;
+    final quantityEditController =
+        TextEditingController();
 
-  showDialog(
+    editController.text = currentName;
 
-    context: context,
+    quantityEditController.text =
+        currentQuantity.toString();
 
-    builder: (context) {
+    showDialog(
 
-      return AlertDialog(
+      context: context,
 
-        title: const Text('Editar Item'),
+      builder: (context) {
 
-        content: TextField(
+        return AlertDialog(
 
-          controller: editController,
-
-          decoration: const InputDecoration(
-            labelText: 'Novo nome',
-          ),
-        ),
-
-        actions: [
-
-          TextButton(
-
-            onPressed: () {
-
-              Navigator.pop(context);
-            },
-
-            child: const Text('Cancelar'),
+          title: const Text(
+            'Editar Item',
           ),
 
-          ElevatedButton(
+          content: Column(
 
-            onPressed: () async {
+            mainAxisSize: MainAxisSize.min,
 
-              await databaseService.editItem(
-                id,
-                editController.text,
-              );
+            children: [
 
-              Navigator.pop(context);
+              // NOME
+              TextField(
 
-              setState(() {});
-            },
+                controller: editController,
 
-            child: const Text('Salvar'),
+                decoration: const InputDecoration(
+                  labelText: 'Nome',
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              // QUANTIDADE
+              TextField(
+
+                controller:
+                    quantityEditController,
+
+                keyboardType:
+                    TextInputType.number,
+
+                decoration: const InputDecoration(
+                  labelText: 'Quantidade',
+                ),
+              ),
+            ],
           ),
-        ],
-      );
-    },
-  );
-}
+
+          actions: [
+
+            TextButton(
+
+              onPressed: () {
+
+                Navigator.pop(context);
+              },
+
+              child: const Text('Cancelar'),
+            ),
+
+            ElevatedButton(
+
+              onPressed: () async {
+
+                if (editController
+                    .text
+                    .isEmpty) {
+                  return;
+                }
+
+                await databaseService.editItem(
+
+                  id,
+
+                  editController.text,
+
+                  int.tryParse(
+                        quantityEditController.text,
+                      ) ??
+                      1,
+                );
+
+                Navigator.pop(context);
+
+                setState(() {});
+              },
+
+              child: const Text('Salvar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,6 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               children: [
 
+                // NOME
                 Expanded(
 
                   child: TextField(
@@ -169,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     controller: itemController,
 
                     decoration: const InputDecoration(
-                      labelText: 'Adicionar item',
+                      labelText: 'Item',
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -177,8 +234,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 const SizedBox(width: 10),
 
+                // QUANTIDADE
+                SizedBox(
+
+                  width: 80,
+
+                  child: TextField(
+
+                    controller: quantityController,
+
+                    keyboardType: TextInputType.number,
+
+                    decoration: const InputDecoration(
+                      labelText: 'Qtd',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(width: 10),
+
+                // BOTÃO
                 ElevatedButton(
+
                   onPressed: addItem,
+
                   child: const Text('+'),
                 ),
               ],
@@ -241,13 +321,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
 
                           title: Text(
-                            item['name'],
+                            '${item['name']} - ${item['quantity']}x',
                             style: TextStyle(
-                              decoration: item['checked']
-                              ? TextDecoration.lineThrough
-                              : null,
+                            decoration: item['checked']
+                                ? TextDecoration.lineThrough
+                                : null,
                             ),
-                          ),
+                           ),
 
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -262,6 +342,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   editItemDialog(
                                     item['id'],
                                     item['name'],
+                                    item['quantity'],
                                   );
                                 },
 
